@@ -13,21 +13,23 @@ defmodule SlackRtm do
     end
   end
 
-  def handle_event(message = %{type: "message", text: text}, slack, state) do
+  def handle_event(message = %{type: "message"}, slack, state) do
     IO.inspect message
     tokens = String.split(message.text)
     [first | rest] = tokens
     if first == "!standup" do
       case rest do
-        ["enroll" | users]   ->
+        ["enroll" | users] ->
           StandupBot.Users.enroll_users(:users, Utils.validate_users(users))
           |> action_response(message, slack)
         ["unenroll" | users] ->
           StandupBot.Users.unenroll_users(:users, Utils.validate_users(users))
           |> action_response(message, slack)
-        ["list"]             ->
+        ["list"] ->
           send_message("Not implemented", message.channel, slack)
-        unknown               ->
+        ["help"] ->
+          send_message("Supported Commands (precede with `!standup`):\n`enroll @teammate1 @teammate2...`\n`unenroll @teammate1 @teammate2...`", message.channel, slack)
+        _unknown ->
           send_message("Unknown command", message.channel, slack)
       end
     else

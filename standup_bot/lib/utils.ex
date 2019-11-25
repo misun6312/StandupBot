@@ -13,14 +13,14 @@ defmodule Utils do
     |> Enum.map(&String.replace(&1, ">", ""))
   end
 
-  defp standup_time(ndt, hour \\ 10, minute \\ 45) do
+  defp standup_time(ndt, hour, minute) do
     %DateTime{
       year: ndt.year,
       month: ndt.month,
       day: ndt.day,
       zone_abbr: ndt.zone_abbr,
-      hour: 10,
-      minute: 45,
+      hour: hour,
+      minute: minute,
       second: 0,
       microsecond: {0, 0},
       utc_offset: ndt.utc_offset,
@@ -29,15 +29,19 @@ defmodule Utils do
     }
   end
 
-  def ms_til_next_standup(hour \\ 10, minute \\ 45) do
-    curr_dt = DateTime.utc_now()
-    standup_dt = if curr_dt.hour > hour and curr_dt.minute > minute do
-      standup_time(DateTime.add(curr_dt, 86400, :second, FakeTimeZoneDatabase))
+  def ms_til_next_standup(hour, minute) do
+    # EST is 5 hours behind UTC
+    curr_dt = DateTime.utc_now() |> DateTime.add(-18000, :second)
+    IO.inspect {:curr_dt, curr_dt}
+
+    standup_dt = if curr_dt.hour >= hour and curr_dt.minute >= minute do
+      standup_time(DateTime.add(curr_dt, 86400, :second), hour, minute)
     else
       standup_time(curr_dt, hour, minute)
     end
-    IO.inspect standup_dt
-    DateTime.diff(standup_dt, curr_dt) * 1000
+    
+    IO.inspect {:standup_dt, standup_dt}
+    abs(DateTime.diff(curr_dt, standup_dt)) * 1000
   end
 end
 

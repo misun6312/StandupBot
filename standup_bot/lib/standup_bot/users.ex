@@ -6,10 +6,6 @@ defmodule StandupBot.Users do
     Agent.start_link(fn -> %MapSet{} end)
   end
 
-  defp get(bucket, value) do
-    Agent.get(bucket, &MapSet.get(&1, value))
-  end
-
   defp put(bucket, value) do
     Agent.update(bucket, &MapSet.put(&1, value))
   end
