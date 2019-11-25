@@ -1,5 +1,11 @@
 defmodule Utils do
 
+  def fetch_creds do
+    "priv/creds.json"
+    |> File.read!
+    |> Poison.decode!
+  end
+
   def validate_users(users) do
     users
     |> Enum.filter(&Regex.match?(~r/<@[A-Z\d]+>/, &1))

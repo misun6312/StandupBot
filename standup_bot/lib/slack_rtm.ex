@@ -7,8 +7,10 @@ defmodule SlackRtm do
   end
 
   defp action_response(results, message, slack) do
-    IO.inspect({:results, results})
-    send_message("Done! :white_check_mark:", message.channel, slack)
+    case results do
+      {:error, nil} -> send_message("Invalid command :x:", message.channel, slack)
+      _             -> send_message("Done! :white_check_mark:", message.channel, slack)
+    end
   end
 
   def handle_event(message = %{type: "message", text: text}, slack, state) do
