@@ -1,11 +1,19 @@
 defmodule Utils do
 
-  def fetch_creds do
-    "priv/creds.json"
+  @doc """
+  Transform a json file into a Map
+  """
+  def read_json_file(file_name) do
+    file_name
     |> File.read!
     |> Poison.decode!
   end
 
+
+  @doc """
+  Assert and filter a collection to only valid slack
+  user ids
+  """
   def validate_users(users) do
     users
     |> Enum.filter(&Regex.match?(~r/<@[A-Z\d]+>/, &1))
@@ -13,6 +21,12 @@ defmodule Utils do
     |> Enum.map(&String.replace(&1, ">", ""))
   end
 
+
+  @doc """
+  Supplies an immutable copy of a datetime
+  with the seconds/microseconds set to 0.
+  TODO: is there an `update` function for a datetime object?
+  """
   defp standup_time(ndt, hour, minute) do
     %DateTime{
       year: ndt.year,
@@ -29,8 +43,12 @@ defmodule Utils do
     }
   end
 
+
+  @doc """
+  Calculates the delta in milliseconds from the current time
+  until the next standup
+  """
   def ms_til_next_standup(hour, minute) do
-    # EST is 5 hours behind UTC
     curr_dt = DateTime.utc_now() |> DateTime.add(-18000, :second)
     IO.inspect {:curr_dt, curr_dt}
 
