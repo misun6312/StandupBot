@@ -43,19 +43,20 @@ defmodule Utils do
     }
   end
 
-
   @doc """
   Calculates the delta in milliseconds from the current time
   until the next standup
   """
   def ms_til_next_standup(hour, minute) do
     curr_dt = DateTime.utc_now() |> DateTime.add(-18000, :second)
+    todays_standup_dt = standup_time(curr_dt, hour, minute)
     IO.inspect {:curr_dt, curr_dt}
 
-    standup_dt = if curr_dt.hour >= hour and curr_dt.minute >= minute do
-      standup_time(DateTime.add(curr_dt, 86400, :second), hour, minute)
-    else
-      standup_time(curr_dt, hour, minute)
+    IO.inspect {:comp, DateTime.compare(curr_dt, todays_standup_dt)}
+
+    standup_dt = case DateTime.compare(curr_dt, todays_standup_dt) do
+      :lt       -> todays_standup_dt
+      _gt_or_eq -> standup_time(DateTime.add(curr_dt, 86400, :second), hour, minute)
     end
     
     IO.inspect {:standup_dt, standup_dt}
