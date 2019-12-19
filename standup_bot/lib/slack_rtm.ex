@@ -1,6 +1,11 @@
 defmodule SlackRtm do
   use Slack
 
+  alias StandupBot.{
+    Users,
+    Messages,
+  }
+
   def handle_connect(slack, state) do
     IO.puts "Connected as #{slack.me.name}"
     {:ok, state}
@@ -18,15 +23,15 @@ defmodule SlackRtm do
       ["!standup" | rest] ->
         case rest do
           ["enroll" | users] ->
-            StandupBot.Users.enroll_users(:users, Utils.validate_users(users))
+            Users.enroll_users(:users, Utils.validate_users(users))
             |> action_response(message, slack)
           ["unenroll" | users] ->
-            StandupBot.Users.unenroll_users(:users, Utils.validate_users(users))
+            Users.unenroll_users(:users, Utils.validate_users(users))
             |> action_response(message, slack)
           ["help"] ->
-            send_message(StandupBot.Messages.help(), channel, slack)
+            send_message(Messages.help(), channel, slack)
           _unknown ->
-            send_message(StandupBot.Messages.unknown(), channel, slack)
+            send_message(Messages.unknown(), channel, slack)
         end
       _other_msg -> :ok
     end
@@ -42,7 +47,6 @@ defmodule SlackRtm do
 
   def handle_close(reason, _slack, state) do
     IO.inspect {:closing, "[#{state.token}] Closing Slack session. Reason: #{reason}"}
-    IO.puts "TIME TO RESTART CLIENT CONNECTION"
     {:ok, state}
   end
 end
