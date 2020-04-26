@@ -39,4 +39,34 @@ defmodule StandupBot.Users do
     end
   end
 
+  def pick_starter(cfg, tmp) do
+    # Get users
+    users = if File.exists?(tmp) do
+      Utils.read_json_file(tmp) |> Map.get("users")
+    else
+      users = Utils.read_json_file(cfg) |> Map.get("users")
+      Utils.write_json_file(tmp, %{"users" => users})
+      users
+    end
+    # Normalize and shuffle list
+    users = users
+    |> MapSet.new()
+    |> Enum.to_list()
+    |> Enum.shuffle()
+    # Pick starter
+    starter = Enum.random(users)
+    remaining = Enum.filter(users, &(&1!=starter))
+    remaining = if length(remaining) == 0 do
+      Utils.read_json_file(cfg) |> Map.get("users")
+    else
+      remaining
+    end
+    IO.inspect {:remaining_people, remaining}
+    # Write updated file back
+    Utils.write_json_file(tmp, %{
+      "users" => remaining,
+    })
+    starter
+  end
+
 end

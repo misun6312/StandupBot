@@ -46,7 +46,7 @@ defmodule SlackRtm do
   def handle_info(_, _, state), do: {:ok, state}
 
   def handle_close(reason, _slack, state) do
-    IO.inspect {:closing, "[#{state.token}] Closing Slack session. Reason: #{reason}"}
+    IO.puts "Handle close Called"
     {:ok, state}
   end
 end

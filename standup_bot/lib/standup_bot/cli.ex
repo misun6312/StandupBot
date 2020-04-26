@@ -9,13 +9,15 @@ defmodule StandupBot.CLI do
   Entry point of the program. Parse args plus start initialize
   """
   def main(args \\ []) do
-    [channel, [hour, minute], config_file] = case args do
-      [channel, time, config_file] -> [
+    IO.inspect args
+    [channel, [hour, minute], config_file, temp_file] = case args do
+      [channel, time, config_file, temp_file] -> [
         "#" <> channel,
         String.split(time, ":")
         |> IO.inspect()
         |> Enum.map(&String.to_integer/1),
-        config_file
+        config_file,
+        temp_file
       ]
       _ -> IO.puts "Error: Need arguments for channel (ex `standup`) and time (ex `10:45`)"
     end
@@ -32,7 +34,13 @@ defmodule StandupBot.CLI do
 
     # Start supervisor
     Process.sleep(4000)
-    StandupBotSupervisor.start_link([[bot_token, channel, hour, minute]])
+    StandupBotSupervisor.start_link([[
+      bot_token,
+      channel,
+      hour,
+      minute,
+      config_file,
+      temp_file]])
   end
 
 end
