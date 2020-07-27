@@ -21,6 +21,12 @@ defmodule Utils do
     |> Enum.map(&String.replace(&1, ">", ""))
   end
 
+  def write_json_file(file_name, contents) do
+    contents = contents |> Poison.encode!()
+    file_name
+    |> File.write!(contents)
+  end
+
 
   @doc """
   Supplies an immutable copy of a datetime
