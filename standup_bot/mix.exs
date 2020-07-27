@@ -20,7 +20,7 @@ defmodule StandupBot.MixProject do
   end
 
   defp escript do
-    [main_module: StandupBot]
+    [main_module: StandupBot.CLI]
   end
 
   # Run "mix help deps" to learn about dependencies.
