@@ -8,14 +8,14 @@ defmodule StandupBot.MixProject do
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      escript: escript(),
+      escript: escript()
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger]
     ]
   end
 
@@ -26,7 +26,9 @@ defmodule StandupBot.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:slack, "~> 0.19.0"},
+      {:slack, "~> 0.23.5"},
+      {:poison, "~> 3.1"},
+      {:tentacat, "~> 2.0"}
     ]
   end
 end

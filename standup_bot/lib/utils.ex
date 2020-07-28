@@ -1,14 +1,12 @@
 defmodule Utils do
-
   @doc """
   Transform a json file into a Map
   """
   def read_json_file(file_name) do
     file_name
-    |> File.read!
-    |> Poison.decode!
+    |> File.read!()
+    |> Poison.decode!()
   end
-
 
   @doc """
   Assert and filter a collection to only valid slack
@@ -23,10 +21,10 @@ defmodule Utils do
 
   def write_json_file(file_name, contents) do
     contents = contents |> Poison.encode!()
+
     file_name
     |> File.write!(contents)
   end
-
 
   @doc """
   Supplies an immutable copy of a datetime
@@ -45,28 +43,28 @@ defmodule Utils do
       microsecond: {0, 0},
       utc_offset: ndt.utc_offset,
       std_offset: ndt.std_offset,
-      time_zone: ndt.time_zone,
+      time_zone: ndt.time_zone
     }
   end
 
   @doc """
   Calculates the delta in milliseconds from the current time
-  until the next standup
+  until the next scheduled action
   """
-  def ms_til_next_standup(hour, minute) do
+  def ms_til_next_action(hour, minute) do
     curr_dt = DateTime.utc_now() |> DateTime.add(-18000, :second)
     todays_standup_dt = standup_time(curr_dt, hour, minute)
-    IO.inspect {:curr_dt, curr_dt}
 
-    IO.inspect {:comp, DateTime.compare(curr_dt, todays_standup_dt)}
+    standup_dt =
+      case DateTime.compare(curr_dt, todays_standup_dt) do
+        :lt -> todays_standup_dt
+        _gt_or_eq -> standup_time(DateTime.add(curr_dt, 86400, :second), hour, minute)
+      end
 
-    standup_dt = case DateTime.compare(curr_dt, todays_standup_dt) do
-      :lt       -> todays_standup_dt
-      _gt_or_eq -> standup_time(DateTime.add(curr_dt, 86400, :second), hour, minute)
-    end
-    
-    IO.inspect {:standup_dt, standup_dt}
     abs(DateTime.diff(curr_dt, standup_dt)) * 1000
   end
-end
 
+  def temp_filepath(tmp_dir, job) do
+    tmp_dir <> "/" <> ".#{job}.json"
+  end
+end
