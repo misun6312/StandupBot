@@ -1,46 +1,35 @@
 defmodule StandupBot.CLI do
-
-  alias StandupBot.{
-    Users,
-    Messages,
-  }
-
   @doc """
   Entry point of the program. Parse args plus start initialize
   """
   def main(args \\ []) do
-    IO.inspect args
-    [channel, [hour, minute], config_file, temp_file] = case args do
-      [channel, time, config_file, temp_file] -> [
-        "#" <> channel,
-        String.split(time, ":")
-        |> IO.inspect()
-        |> Enum.map(&String.to_integer/1),
-        config_file,
-        temp_file
-      ]
-      _ -> IO.puts "Error: Need arguments for channel (ex `standup`) and time (ex `10:45`)"
-    end
+    [config_file, temp_dir] =
+      case args do
+        [config_file, temp_dir] ->
+          [
+            config_file,
+            String.trim_trailing(temp_dir, "/")
+          ]
+
+        _ ->
+          IO.puts("Error: Need arguments for config file path and temp directory")
+      end
 
     %{
       "bot_user_oauth_access_token" => bot_token,
-      "users"                       => default_users,
+      "github_token" => gh_token,
+      "jobs" => jobs
     } = Utils.read_json_file(config_file)
 
-    # Create users agent state store + register pid
-    {:ok, users_pid} = Users.start_link([])
-    Process.register(users_pid, :users)
-    Users.enroll_users(:users, default_users)
-
     # Start supervisor
-    Process.sleep(4000)
-    StandupBotSupervisor.start_link([[
-      bot_token,
-      channel,
-      hour,
-      minute,
+    StandupBot.start_link([
       config_file,
-      temp_file]])
-  end
+      bot_token,
+      gh_token,
+      temp_dir,
+      jobs
+    ])
 
+    Process.sleep(:infinity)
+  end
 end
