@@ -16,18 +16,16 @@ defmodule StandupBot.CLI do
       end
 
     %{
-      "bot_user_oauth_access_token" => bot_token,
-      "github_token" => gh_token,
-      "jobs" => jobs
+      "bot_token" => bot_token,
+      "tasks" => tasks
     } = Utils.read_json_file(config_file)
 
     # Start supervisor
     StandupBot.start_link([
       config_file,
       bot_token,
-      gh_token,
       temp_dir,
-      jobs
+      tasks
     ])
 
     Process.sleep(:infinity)

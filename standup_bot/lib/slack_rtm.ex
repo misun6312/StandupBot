@@ -20,7 +20,7 @@ defmodule SlackRtm do
 
   def handle_event(message = %{type: "message", text: text, channel: channel}, slack, state) do
     case String.split(text) do
-      ["!toursteam" | rest] ->
+      ["!teambot" | rest] ->
         case rest do
           ["standup"] ->
             Process.send(Elixir.StandupBot.Tasks.Standup, :demand_invoke, [])

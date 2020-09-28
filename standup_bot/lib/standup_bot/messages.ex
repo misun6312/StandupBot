@@ -7,11 +7,11 @@ defmodule StandupBot.Messages do
   end
 
   def help do
-    "Supported Commands (precede with `!toursteam`):\n • `standup`\n • `greenkeeping`\n • `help`"
+    "Supported Commands (precede with `!teambot`):\n • `standup`\n • `greenkeeping`\n • `help`"
   end
 
   def unknown do
-    "Unknown command. Use `!toursteam help` to see supported commands."
+    "Unknown command. Use `!teambot help` to see supported commands."
   end
 
   def greenkeeping(person, pr_links) do
