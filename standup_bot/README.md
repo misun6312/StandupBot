@@ -8,6 +8,8 @@ StandupBot is an extensible Slack bot that executes daily repetitive Slack team 
 ## Installation
 In order to use StandupBot, you will need to install [Elixir](https://elixir-lang.org/install.html#distributions).
 
+You will also need to [create a Slack App for your integration](https://api.slack.com/apps/) for your bot.
+
 ## Usage
 ### Defining a Config
 In order to use this application, you will need to define a configuration file `standup_bot/priv/config.json` containing the job specs that you want to execute (you may need to create the `/priv` directory yourself). An example configuration file looks something like this:
