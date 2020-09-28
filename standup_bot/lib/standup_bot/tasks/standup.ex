@@ -70,6 +70,7 @@ defmodule StandupBot.Tasks.Standup do
     person = Users.pick_without_replacement(cfg, tmp_dir, job)
     direction = Enum.random(["left", "right"])
     msg = Messages.start_standup(person, direction)
+    IO.inspect({:standup})
     send(rtm, {:message, msg, channel})
   end
 end

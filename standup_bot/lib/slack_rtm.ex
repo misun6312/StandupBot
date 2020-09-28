@@ -1,10 +1,7 @@
 defmodule SlackRtm do
   use Slack
 
-  alias StandupBot.{
-    Users,
-    Messages
-  }
+  alias StandupBot.Messages
 
   def handle_connect(slack, state) do
     IO.puts("Connected as #{slack.me.name}")
