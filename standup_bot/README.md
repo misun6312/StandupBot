@@ -63,9 +63,8 @@ In order to test, there's a few steps you will need to follow.
 
 1. You will want to create a test channel in Slack and use this channel in your config.
 2. Add your bot to this test channel.
-3. Run `mix deps.get` in the project directory to download necessary dependencies
-4. Execute `./run.sh` script in project directory. This will start up the application and connect to Slack.
-5. In your test channel, send the message `!teambot help`. If the bot is online, it should respond with a list of available commands.
+3. Execute `./run.sh` script in project directory. This will start up the application and connect to Slack.
+4. In your test channel, send the message `!teambot help`. If the bot is online, it should respond with a list of available commands.
 
 Note that if you already have an instance of this bot running in your team channel, you should stop it first before testing locally.
 

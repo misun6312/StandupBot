@@ -12,7 +12,7 @@ defmodule StandupBot.Users do
 
         all_users =
           config_map
-          |> get_in(["jobs", job, "users"])
+          |> get_in(["tasks", job, "users"])
 
         Utils.write_json_file(tmp_file, %{"users" => all_users})
         all_users
@@ -33,7 +33,7 @@ defmodule StandupBot.Users do
     remaining =
       if length(remaining) == 0 do
         Utils.read_json_file(cfg)
-        |> get_in(["jobs", job, "users"])
+        |> get_in(["tasks", job, "users"])
       else
         remaining
       end

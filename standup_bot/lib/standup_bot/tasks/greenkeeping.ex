@@ -71,6 +71,7 @@ defmodule StandupBot.Tasks.Greenkeeping do
     person = Users.pick_without_replacement(cfg, tmp_dir, job)
     pr_links = github_links(gh_token)
     msg = Messages.greenkeeping(person, pr_links)
+    IO.inspect({:greenkeeping_time})
     send(rtm, {:message, msg, channel})
   end
 
