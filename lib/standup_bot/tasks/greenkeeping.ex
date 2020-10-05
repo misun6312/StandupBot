@@ -37,9 +37,10 @@ defmodule StandupBot.Tasks.Greenkeeping do
         } = state,
         _opts \\ []
       ) do
+    week_of_year = div(Date.day_of_year(DateTime.utc_now()),7)
     cond do
       ctr == 0 -> IO.puts("task #{job} initialized")
-      Date.day_of_week(DateTime.utc_now()) in week_days -> greenkeeping_time(state)
+      Date.day_of_week(DateTime.utc_now()) in week_days && rem(week_of_year, 2) == 1 -> greenkeeping_time(state)
       true -> :ok
     end
 
@@ -81,7 +82,7 @@ defmodule StandupBot.Tasks.Greenkeeping do
     {200, %{"items" => items}, _} =
       Tentacat.Search.issues(client, %{
         "q" =>
-          "repo:UrbanCompass/uc-frontend is:pr is:open sort:updated-desc label:Greenkeeping label:\"Growth Infrastructure Frontend\""
+          "repo:UrbanCompass/uc-frontend is:pr is:open sort:updated-desc label:Greenkeeping label:\"Agent Home FE\""
       })
 
     Enum.reduce(items, [], fn x, acc ->

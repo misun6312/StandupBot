@@ -21,10 +21,10 @@ defmodule StandupBot.Messages do
       |> Enum.join()
 
     """
-    *Time for Weekly Greenkeeping!* 🍃🌿
-    This week's greenkeeper is <@#{person}> 💚🚜
+    *Time for Greenkeeping!* 🍃🌿
+    This sprint's greenkeeper is <@#{person}> 💚🚜
 
-    Instructions can be found <https://docs.google.com/document/d/1Bo77hbjQnX3dnqiUn4prV1zbd71P839q-72GDmfwSsg/edit?usp=sharing|here>
+    Instructions can be found <https://docs.google.com/document/d/1jje76ug7ggWXnymPu4seylaZjV-4JzhBq7tXIjLU_1g/edit?usp=sharing|here>
 
     Greenkeeping PRs 👇
     #{pr_bullets}
